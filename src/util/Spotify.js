@@ -50,25 +50,16 @@ const Spotify = {
         }
         let accessToken = this.getAccessToken();
         let headers = {
-            headers: {
                 Authorization: `Bearer ${accessToken}`
-            }};
+            };
         let userID;
-        return fetch(`https://api.spotify.com/v1/me`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        }).then(response => {
+        return fetch(`https://api.spotify.com/v1/me`,{headers: headers})
+        .then(response => {
             return response.json();
         }).then(jsonResponse => {
-            if (jsonResponse.tracks) {
-                return jsonResponse.tracks.items.map(track => ({
-                    name: track.name,
-                    artist: track.artists[0],
-                    album: track.album,
-                    id: track.id,
-                    uri: track.uri
-                }));
+            if (jsonResponse.id) {
+                userID = jsonResponse.id
+                return userID;
             }
         });
 

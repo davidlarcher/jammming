@@ -25,7 +25,7 @@ class App extends Component {
         }
       ] 
     ,
-    playlistName: 'Playlist c est la fête',
+    playlistName: 'New Playlist',
     playlistTracks: [
         {
           name: 'Musique de playlist',
@@ -57,15 +57,19 @@ class App extends Component {
 
   };
   addTrack(track) {
+    let tracks = this.state.playlistTracks;
     if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
       return;
     } else {
-      this.setState({playlistTracks: this.state.playlistTracks.push(track)});
+      tracks.push(track)
+      this.setState({playlistTracks: tracks});
     }
   };
 
   removeTrack(track) {
-    this.setState({ playlistTracks: this.state.playlistTracks.filter(testedTrack => testedTrack.id !== track.id) });
+    let tracks = this.state.playlistTracks;
+    tracks.filter(testedTrack => testedTrack.id !== track.id);
+    this.setState({ playlistTracks: tracks });
   };
 
   updatePlaylistName(name){
