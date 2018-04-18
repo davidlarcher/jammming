@@ -60,12 +60,12 @@ class App extends Component {
     if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
       return;
     } else {
-      return this.setState({playlistTracks: this.state.playlistTracks.push(track)});
+      this.setState({playlistTracks: this.state.playlistTracks.push(track)});
     }
   };
 
   removeTrack(track) {
-    return this.setState({ playlistTracks: this.state.playlistTracks.filter(testedTrack => testedTrack.id !== track.id) });
+    this.setState({ playlistTracks: this.state.playlistTracks.filter(testedTrack => testedTrack.id !== track.id) });
   };
 
   updatePlaylistName(name){

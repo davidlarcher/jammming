@@ -8,10 +8,11 @@ class Track extends React.Component {
     }
 
     addTrack() {
-        return this.props.onAdd(this.props.track);
+        console.log(this.props.track);
+        this.props.onAdd(this.props.track);
     }
-    removeTrack(){
-        return this.props.onRemove(this.props.track);
+    removeTrack() {
+        this.props.onRemove(this.props.track);
     }
 
     render() {
