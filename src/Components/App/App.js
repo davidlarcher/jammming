@@ -67,8 +67,7 @@ class App extends Component {
   };
 
   removeTrack(track) {
-    let tracks = this.state.playlistTracks;
-    tracks.filter(testedTrack => testedTrack.id !== track.id);
+    let tracks = this.state.playlistTracks.filter(testedTrack => testedTrack.id !== track.id);
     this.setState({ playlistTracks: tracks });
   };
 
