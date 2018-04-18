@@ -8,6 +8,7 @@ const Spotify = {
         const tokenInURL = window.location.href.match(/access_token=([^&]*)/);
         const expiresInURL = window.location.href.match(/expires_in=([^&]*)/);
         if (accessToken) {
+            console.log(accessToken);
             return accessToken;
         } 
         if (tokenInURL && expiresInURL ) {
@@ -44,7 +45,7 @@ const Spotify = {
         });
     },
     getUserID() {
-        let accessToken = this.getAccessToken();
+        accessToken = this.getAccessToken();
         let headers = { Authorization: `Bearer ${accessToken}`};
         return fetch(`https://api.spotify.com/v1/me`, { headers: headers })
             .then(response => {
@@ -55,25 +56,40 @@ const Spotify = {
                 }
             });
     },
-    savePlaylist(playlistName,trackURIs) {
-        if (!playlistName || !trackURIs) {
+    savePlaylist(playlistName, trackURIs) {
+        if (!playlistName) {
             return;
         }
         let accessToken = this.getAccessToken();
         let headers = {
-                Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
-            };
+            Authorization: `Bearer ${accessToken}`
+        };
+        console.log(headers);
         let userID = this.getUserID();
         let url = `https://api.spotify.com/v1/users/${userID}/playlists`;
-        fetch(url, {
+        let playlistID = fetch(url, {
             method: 'POST',
             headers: headers,
             body: JSON.stringify({
                 name: playlistName
             })
-        },
-        )
+        }).then(response => {
+            return response.json();
+        }).then(jsonResponse => {
+            if (jsonResponse.id) {
+                return jsonResponse.id;
+            }
+        });
+        url = `https://api.spotify.com/v1/users/${userID}/playlists/${playlistID}/tracks`;
+        fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                uris: trackURIs
+            })
+        }).then(response => {
+            return response.json();
+        })
 
     }
 
