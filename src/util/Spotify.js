@@ -64,32 +64,36 @@ const Spotify = {
         let headers = {
             Authorization: `Bearer ${accessToken}`
         };
-        console.log(headers);
-        let userID = this.getUserID();
-        let url = `https://api.spotify.com/v1/users/${userID}/playlists`;
-        let playlistID = fetch(url, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify({
-                name: playlistName
+        this.getUserID()
+            .then(userID => {
+                let url = `https://api.spotify.com/v1/users/${userID}/playlists`;
+                fetch(url, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({
+                        name: playlistName
+                    })
+                }).then(response => {
+                    return response.json();
+                }).then(jsonResponse => {
+                    if (jsonResponse.id) {
+                        return jsonResponse.id;
+                    }
+                }).then(playlistID => {
+                url = `https://api.spotify.com/v1/users/${userID}/playlists/${playlistID}/tracks`;
+                fetch(url, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({
+                        uris: trackURIs
+                    })
+                }).then(response => {
+                    return response.json();
+                })
             })
-        }).then(response => {
-            return response.json();
-        }).then(jsonResponse => {
-            if (jsonResponse.id) {
-                return jsonResponse.id;
-            }
-        });
-        url = `https://api.spotify.com/v1/users/${userID}/playlists/${playlistID}/tracks`;
-        fetch(url, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify({
-                uris: trackURIs
-            })
-        }).then(response => {
-            return response.json();
         })
+        
+
 
     }
 
